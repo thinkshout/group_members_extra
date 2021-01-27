@@ -6,6 +6,8 @@ use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Implements hook_entity_bundle_create().
+ *
+ * Could be in event after https://www.drupal.org/project/drupal/issues/2553169.
  */
 function group_members_extra_entity_bundle_create($entity_type_id, $bundle) {
   // Only create config objects while config import is not in progress.
