@@ -1,16 +1,13 @@
-uuid: 313ebf13-6349-4585-8a05-7f5cf4c6ab42
 langcode: en
 status: true
 dependencies:
   module:
     - group
     - user
-_core:
-  default_config_hash: zIcnLmbW8inPRIQdPSVbKPuG2o5G5wHGJED4Jlgb2SY
 id: group_members_extra
 label: 'Group members extra'
 module: group
-description: ''
+description: 'An overview of all group members'
 tag: ''
 base_table: group_content_field_data
 base_field: id
@@ -481,6 +478,7 @@ display:
           entity_type: group_content
           entity_field: gid
           plugin_id: numeric
+      block_category: Group
     cache_metadata:
       max-age: -1
       contexts:
