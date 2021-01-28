@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 
@@ -51,4 +52,35 @@ function group_members_extra_entity_bundle_create($entity_type_id, $bundle) {
     'type' => 'boolean_checkbox',
   ])->save();
 
+}
+
+/**
+ * Implements hook_views_post_execute().
+ *
+ * Add substitution for the group_type_label to be used in Views.
+ */
+function group_members_extra_views_post_execute(&$view) {
+  /** @var \Drupal\views\ViewExecutable $view */
+  $args = $view->argument;
+  if (isset($args['gid'])) {
+    $gid = $args['gid']->getValue();
+    $group = Drupal::entityTypeManager()->getStorage('group')->load($gid);
+
+    /** @var \Drupal\group\Entity\Group $group */
+    if ($group) {
+      $view->build_info['substitutions']['{{ group_type_label }}'] = $group->getGroupType()->label();
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add substitution in the help description in Views UI argument form.
+ */
+function group_members_extra_form_views_ui_config_item_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $storage = $form_state->getStorage();
+  if ($storage['type'] === 'argument' && $storage['id'] === 'gid') {
+    $form['options']['token_help']['#value'][1]['#items'][] = "{{ group_type_label }} == " . t('Group type: label');
+  }
 }
