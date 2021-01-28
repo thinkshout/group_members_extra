@@ -136,6 +136,7 @@ class GroupMembersExtraOverview extends ViewsKernelTestBase {
 
     $view->preview('block_1', [$group2->id()]);
     $this->assertEquals(1, count($view->result), 'Found the expected number of results.');
+    $this->assertEqual($view->getTitle(), 'Custom group contacts', 'Title is as expected.');
     $view->destroy();
 
     $view->preview('default', [22]);

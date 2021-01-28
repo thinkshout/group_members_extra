@@ -4,6 +4,7 @@ use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_entity_bundle_create().
@@ -59,7 +60,7 @@ function group_members_extra_entity_bundle_create($entity_type_id, $bundle) {
  *
  * Add substitution for the group_type_label to be used in Views.
  */
-function group_members_extra_views_post_execute(&$view) {
+function group_members_extra_views_post_execute(ViewExecutable $view) {
   /** @var \Drupal\views\ViewExecutable $view */
   $args = $view->argument;
   if (isset($args['gid'])) {
