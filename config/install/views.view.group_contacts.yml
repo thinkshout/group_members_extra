@@ -7,7 +7,7 @@ dependencies:
 id: group_contacts
 label: 'Group contacts'
 module: views
-description: 'An overview of group members which are group contacts'
+description: 'An overview of group members who are group contacts'
 tag: ''
 base_table: group_content_field_data
 base_field: id
