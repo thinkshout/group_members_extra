@@ -62,7 +62,7 @@ function group_members_extra_uninstall($is_syncing) {
   ];
   foreach ($view_names as $view_name) {
     \Drupal::service('config.factory')->getEditable('views.view.' . $view_name)->delete();
-    $block_config = \Drupal::service('config.factory')->getEditable('block.block.views_block__' . $view_name. '_block_1');
+    $block_config = \Drupal::service('config.factory')->getEditable('block.block.views_block__' . $view_name . '_block_1');
     if ($block_config) {
       $block_config->delete();
     }
