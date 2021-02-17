@@ -2,8 +2,8 @@ name: Group members extra
 type: module
 description: Enable extra functionality for group memberships
 package: Group
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8.8 || ^9
 dependencies:
-  - group
-  - user
-  - views
+  - group:group
+  - drupal:user
+  - drupal:views

@@ -1,7 +1,11 @@
 <?php
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\ViewExecutable;
@@ -53,6 +57,44 @@ function group_members_extra_entity_bundle_create($entity_type_id, $bundle) {
     'type' => 'boolean_checkbox',
   ])->save();
 
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function group_members_extra_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, FieldItemListInterface $items = NULL) {
+  // Can't retrieve an entity from an empty item list.
+  if (!isset($items)) {
+    return AccessResult::neutral();
+  }
+
+  // We only care about the group_contact field when on a form.
+  if ($operation !== 'edit' || $field_definition->getName() !== 'group_contact') {
+    return AccessResult::neutral();
+  }
+
+  // We only care if it is attached to a group content entity.
+  if ($items->getEntity()->getEntityTypeId() !== 'group_content') {
+    return AccessResult::neutral();
+  }
+
+  /** @var \Drupal\group\Entity\GroupContentInterface $group_content */
+  $group_content = $items->getEntity();
+
+  // We only care if the group content entity is a group membership.
+  if ($group_content->getContentPlugin()->getPluginId() !== 'group_membership') {
+    return AccessResult::neutral();
+  }
+
+  // Now that we know we're dealing with a group_contact field on a group
+  // membership form, we need to check whether the group membership belongs to
+  // a group yet. If not, we can't check for access and should always hide it.
+  if (!$group = $group_content->getGroup()) {
+    return AccessResult::forbidden();
+  }
+
+  // Only group administrators should be able to change the group contact field.
+  return AccessResult::forbiddenIf(!$group->hasPermission('administer members', $account));
 }
 
 /**

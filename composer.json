@@ -1,5 +1,5 @@
 {
-    "name": "25knots/group_members_extra",
+    "name": "drupal/group_members_extra",
     "type": "drupal-module",
     "description": "Group members extra",
     "homepage": "https://www.drupal.org/project/group_members_extra",
